@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Prac - Scheduler</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato&family=Roboto&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+
+  <div class="topnav">
+    <a>AI Practicum - Scheduler</a>
+  </div>
+
+  <div class="container">
+    <div class="form-container">
+      <form>
+        <label for="task-name">Task Name:</label>
+        <input type="text" id="task-name" name="task-name" required>
+
+        <label for="task-type">Task Type:</label>
+        <select id="task-type" name="task-type" required>
+          <option value="" selected></option>
+          <option value="homework">Homework</option>
+          <option value="project">Project</option>
+          <option value="chore">Chore</option>
+        </select>
+
+        <label for="task-time">Expected Time (in hours):</label>
+        <input type="number" id="task-time" name="task-time" required>
+
+        <label for="task-due">Due Date:</label>
+        <select id="task-due" name="task-due" required>
+          <option value="" selected></option>
+          <option value="sunday">Sunday</option>
+          <option value="monday">Monday</option>
+          <option value="tuesday">Tuesday</option>
+          <option value="wednesday">Wednesday</option>
+          <option value="thursday">Thursday</option>
+          <option value="friday">Friday</option>
+          <option value="saturday">Saturday</option>
+        </select>
+
+        <button>Submit</button>
+      </form>
+    </div>
+
+    <div class="calendar-container">
+      <table>
+        <thead>
+          <tr>
+            <th>SUN</th>
+            <th>MON</th>
+            <th>TUE</th>
+            <th>WED</th>
+            <th>THU</th>
+            <th>FRI</th>
+            <th>SAT</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>9:00AM - 10:00AM<p></p>
+            </td>
+            <td>9:00AM - 10:00AM<p></p>
+            </td>
+            <td>9:00AM - 10:00AM<p></p>
+            </td>
+            <td>9:00AM - 10:00AM<p></p>
+            </td>
+            <td>9:00AM - 10:00AM<p></p>
+            </td>
+            <td>9:00AM - 10:00AM<p></p>
+            </td>
+            <td>9:00AM - 10:00AM<p></p>
+            </td>
+          </tr>
+          <tr></tr>
+          <tr>
+            <td>10:00AM - 11:00AM<p></p>
+            </td>
+            <td>10:00AM - 11:00AM<p></p>
+            </td>
+            <td>10:00AM - 11:00AM<p></p>
+            </td>
+            <td>10:00AM - 11:00AM<p></p>
+            </td>
+            <td>10:00AM - 11:00AM<p></p>
+            </td>
+            <td>10:00AM - 11:00AM<p></p>
+            </td>
+            <td>10:00AM - 11:00AM<p></p>
+            </td>
+          </tr>
+          <tr>
+            <td>11:00AM - 12:00PM<p></p>
+            </td>
+            <td>11:00AM - 12:00PM<p></p>
+            </td>
+            <td>11:00AM - 12:00PM<p></p>
+            </td>
+            <td>11:00AM - 12:00PM<p></p>
+            </td>
+            <td>11:00AM - 12:00PM<p></p>
+            </td>
+            <td>11:00AM - 12:00PM<p></p>
+            </td>
+            <td>11:00AM - 12:00PM<p></p>
+            </td>
+          </tr>
+          <tr>
+            <td>12:00PM - 1:00PM<p></p>
+            </td>
+            <td>12:00PM - 1:00PM<p></p>
+            </td>
+            <td>12:00PM - 1:00PM<p></p>
+            </td>
+            <td>12:00PM - 1:00PM<p></p>
+            </td>
+            <td>12:00PM - 1:00PM<p></p>
+            </td>
+            <td>12:00PM - 1:00PM<p></p>
+            </td>
+            <td>12:00PM - 1:00PM<p></p>
+            </td>
+          </tr>
+          <tr>
+            <td>1:00PM - 2:00PM<p></p>
+            </td>
+            <td>1:00PM - 2:00PM<p></p>
+            </td>
+            <td>1:00PM - 2:00PM<p></p>
+            </td>
+            <td>1:00PM - 2:00PM<p></p>
+            </td>
+            <td>1:00PM - 2:00PM<p></p>
+            </td>
+            <td>1:00PM - 2:00PM<p></p>
+            </td>
+            <td>1:00PM - 2:00PM<p></p>
+            </td>
+          </tr>
+          <tr>
+            <td>2:00PM - 3:00PM<p></p>
+            </td>
+            <td>2:00PM - 3:00PM<p></p>
+            </td>
+            <td>2:00PM - 3:00PM<p></p>
+            </td>
+            <td>2:00PM - 3:00PM<p></p>
+            </td>
+            <td>2:00PM - 3:00PM<p></p>
+            </td>
+            <td>2:00PM - 3:00PM<p></p>
+            </td>
+            <td>2:00PM - 3:00PM<p></p>
+            </td>
+          </tr>
+          <tr>
+            <td>3:00PM - 4:00PM<p></p>
+            </td>
+            <td>3:00PM - 4:00PM<p></p>
+            </td>
+            <td>3:00PM - 4:00PM<p></p>
+            </td>
+            <td>3:00PM - 4:00PM<p></p>
+            </td>
+            <td>3:00PM - 4:00PM<p></p>
+            </td>
+            <td>3:00PM - 4:00PM<p></p>
+            </td>
+            <td>3:00PM - 4:00PM<p></p>
+            </td>
+          </tr>
+          <tr>
+            <td>4:00PM - 5:00PM<p></p>
+            </td>
+            <td>4:00PM - 5:00PM<p></p>
+            </td>
+            <td>4:00PM - 5:00PM<p></p>
+            </td>
+            <td>4:00PM - 5:00PM<p></p>
+            </td>
+            <td>4:00PM - 5:00PM<p></p>
+            </td>
+            <td>4:00PM - 5:00PM<p></p>
+            </td>
+            <td>4:00PM - 5:00PM<p></p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</body>
+
+</html>
