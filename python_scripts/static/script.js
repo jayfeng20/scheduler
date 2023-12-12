@@ -15,8 +15,22 @@ button.onclick = (event) => {
 
   taskName = data["task-name"];
 
-
-  // Get data from AI (TODO)
+  $.ajax({
+    url: '/process',
+    type: 'POST',
+    data: {
+      'task-name': data["task-name"],
+      'task-type': data["task-type"],
+      'task-time': data["task-time"],
+      'task-due': data["task-due"],
+    },
+    success: function (response) {
+      console.log(response);
+    },
+    error: function (error) {
+      console.log(error);
+    }
+  });
 
   // Update calendar with data
   let calendarData = [

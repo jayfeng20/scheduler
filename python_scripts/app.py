@@ -14,22 +14,14 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-print("before runscript")
-@app.route("/userInput.py", methods=['GET', 'POST'])
-def runscript():
-    print("in runscript")
-    if request.method == 'POST':
-        print("in if statement")
-        taskName = request.form.get('task-name')
-        taskType = request.form.get('task-type')
-        taskTime = request.form.get('task-time')
-        taskDue = request.form.get('task-due')
-        return userInput.printInput(taskName, taskType, taskTime, taskDue)
- 
-    else:
-        return render_template('index.html')
-
-        
+@app.route('/process', methods=['POST']) 
+def process(): 
+    taskName = request.form.get('task-name')
+    taskType = request.form.get('task-type')
+    taskTime = request.form.get('task-time')
+    taskDue = request.form.get('task-due') 
+    userInput.printInput(taskName, taskType, taskTime, taskDue)
+    return "done"
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
