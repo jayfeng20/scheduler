@@ -15,6 +15,7 @@ button.onclick = (event) => {
 
   taskName = data["task-name"];
 
+
   // Get data from AI (TODO)
 
   // Update calendar with data

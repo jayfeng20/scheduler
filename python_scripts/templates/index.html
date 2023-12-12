@@ -21,7 +21,7 @@
 
   <div class="container">
     <div class="form-container">
-      <form>
+      <form action="{{ url_for('runscript') }}" method="POST"> 
         <label for="task-name">Task Name:</label>
         <input type="text" id="task-name" name="task-name" required>
 
@@ -48,7 +48,8 @@
           <option value="saturday">Saturday</option>
         </select>
 
-        <button>Submit</button>
+        <button id="submit-button">Submit</button>
+
       </form>
     </div>
 
@@ -202,7 +203,7 @@
   </div>
 
   <script src="{{ url_for('static', filename='script.js') }}"></script>
-  
+
 </body>
 
 </html>
