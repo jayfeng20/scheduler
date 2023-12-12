@@ -44,14 +44,15 @@ def create(week, cursor):
 # insert rows
 def insert(task_name, start_time, end_time, cursor):
     week1, week2 = start_of_week(start_time)
-    print(week1)
     table_name = f'{week1.month+week1.day+week1.year}'
-    
+    print(table_name, start_time, end_time)
     insert_query = f"""
-    INSERT INTO t{table_name} (task_name, start_time, end_time) VALUES ('{task_name}', '{start_time}', '{end_time}')
+    INSERT INTO t{table_name} (task_name, start_time, end_time) VALUES ('{task_name}', '{start_time}', '{end_time}');
 """
     print(insert_query)
     cursor.execute(insert_query)
+    commit_query = """COMMIT;"""
+    cursor.execute(commit_query)
 
 
 # retrieve data for this week and next week

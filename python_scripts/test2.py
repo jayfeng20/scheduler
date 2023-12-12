@@ -1,13 +1,42 @@
-import os
+from openai import OpenAI
+import os  
+import calendar
+import datetime
+import json 
+from dotenv import load_dotenv
+load_dotenv()
 
-ca_cert_file = 'python_scripts/us-east-2-bundle.p7b'  # Replace with the actual path to your CA certificate file
+import lib.funcs as f
+import mysql.connector
 
-# Check if the file exists
-if os.path.exists(ca_cert_file):
-    # Check if the script has read access to the file
-    if os.access(ca_cert_file, os.R_OK):
-        print(f"The Python script has read access to '{ca_cert_file}'.")
-    else:
-        print(f"The Python script does not have read access to '{ca_cert_file}'.")
-else:
-    print(f"The file '{ca_cert_file}' does not exist.")
+host = os.environ.get("DB_ENDPOINT")
+user = os.environ.get("DB_USERNAME")
+pwd = os.environ.get("DB_PASSWORD")
+db = os.environ.get("DB_NAME")
+
+
+db_config = {
+    "host": host,
+    "user": user,
+    "password": pwd,
+    "database": db,
+    # 'ssl_ca': 'python_scripts/global-bundle.pem'
+}
+
+connection = mysql.connector.connect(**db_config)
+if connection.is_connected():
+    print("Connected to AWS RDS")
+    
+# Create a cursor to execute SQL queries
+cursor = connection.cursor()
+use_db_query = f"USE {db}"
+cursor.execute(use_db_query)
+print(f"Using database {db}")
+
+current_datetime = datetime.datetime.now()
+f.insert(task_name='task1', start_time=current_datetime, end_time=current_datetime, cursor=cursor)
+
+if connection.is_connected():
+        cursor.close()
+        connection.close()
+        print("Connection to AWS RDS closed")
