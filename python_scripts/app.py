@@ -29,7 +29,7 @@ def process():
     # new_end: a list of python Datetime objects that represent the end time of the newly scheduled task
 
     alr_booked_start, alr_booked_end, new_start, new_end = test.run()
-    print(alr_booked_start, alr_booked_end, new_start, new_end)
+    print("final result", alr_booked_start, alr_booked_end, new_start, new_end)
     return "done"
 
 if __name__ == '__main__':

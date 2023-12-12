@@ -12,7 +12,7 @@ import mysql.connector
 
 
 
-def run(task_name='t3', task_type='project', task_time=5, task_due=3):
+def run(task_name='t3', task_type='project', task_time=4, task_due=7):
     task_name = task_name
     task_type = task_type
     expected_time = int(task_time)
@@ -21,7 +21,6 @@ def run(task_name='t3', task_type='project', task_time=5, task_due=3):
     
     assert expected_time <= 24 and 1 <= expected_time
     assert due_in >= 1 and due_in <= 7 # due in at least 1 day and at most 1 week
-    print(task_name)
     current_datetime = datetime.datetime.now()
 
 
@@ -65,29 +64,35 @@ def run(task_name='t3', task_type='project', task_time=5, task_due=3):
 
         alr_booked = []
         rows1, rows2 = f.retrieve(current=current_datetime, cursor=cursor)
-        print(rows1, rows2)
         start_times = [row[2] for row in rows1]
         start_times.extend([row[2] for row in rows2])
         end_times = [row[3] for row in rows1]
         end_times.extend([row[3] for row in rows2])
         for i in range(len(start_times)):
             alr_booked.append(f"{start_times[i]} to {end_times[i]}")
-        print(rows1, rows2)
         print(f'alr_booked: {alr_booked}')
 
       # TODO: Use alr_booked to display initialize the calendar
 
         system_message = """
-        You are a concise and precise assistant. You find the most reasonable time slot(s) to assign this task within the next week
-        and before the due date. If there's extra time, avoid meal time and sleep time.
-        Your output is in the form of a json object with 2 fields named "start_time" and "end_time" whose contents are 
-        python datetime objects. They represent the time slot(s) you chose to schedule the task.
+        You are a smart assistant who is good at time management. 
+        You will be given current time, a task, the expected hours to finish the task, how many days until the task is due and time slots that are already booked.
+        You have to schedule timeslots that do not overlap with already booked timeslots.
+        You are allowed to assign the tasks to up to 2 timeslots as long as the timeslots add up to the expected hours.
+        You will find time slot(s) within the next 7 days, between 9am and 5pm and can be across different days to schedule this task.
+        Your output is in the form of a json object with 2 fields. The first field is named "new_start_times" and 
+        it contains a list of python datetime objects that represent the starting times of the time slots you scheduled.
+        The second field is named "new_end_times" and 
+        it contains a list of python datetime objects that represent the ending times of the time slots you scheduled.
+        So the first element of the new_start_times list and the first element of the new_end_times list would form the first 
+        time slot you scheduled.
         """
 
         user_message = "Can you please find the best time slot(s) for me to do the following task?" + \
+        "I don't want to work for too long in one seating. So please break long tasks down if possible." + \
         f"""
         time right now: {current_datetime}
-        expected time: {expected_time} hours to finish, 
+        expected duration: {expected_time} hours to finish, 
         due in: {due_in} days.
         Already booked slots are: {', '.join(alr_booked)}.
         """
@@ -100,7 +105,7 @@ def run(task_name='t3', task_type='project', task_time=5, task_due=3):
             {"role": "system", "content": system_message},
             {"role": "user", "content": user_message}
           ],
-          top_p=0.3 # TODO: need finetuning
+          top_p=0.1
         )
 
         # ai's response
@@ -108,10 +113,13 @@ def run(task_name='t3', task_type='project', task_time=5, task_due=3):
         response = json.loads(response)
 
         # the new time slots to be added
-        start_time, end_time = response['start_time'], response['end_time']
+        new_start_times, new_end_times = response['new_start_times'], response['new_end_times']
         date_time_format = "%Y-%m-%dT%H:%M:%S"
-        start_time, end_time = datetime.datetime.strptime(start_time, date_time_format), datetime.datetime.strptime(end_time, date_time_format)
-        f.insert(task_name=task_name, start_time=start_time, end_time=end_time, cursor=cursor)
+        for i in range(len(new_end_times)):
+            new_start_times[i] = datetime.datetime.strptime(new_start_times[i], date_time_format)
+            new_end_times[i] = datetime.datetime.strptime(new_end_times[i], date_time_format)
+        # print("test1", new_start_times, new_end_times)
+        f.insert(task_name=task_name, start_times=new_start_times, end_times=new_end_times, cursor=cursor)
         
 
 
@@ -122,4 +130,6 @@ def run(task_name='t3', task_type='project', task_time=5, task_due=3):
             cursor.close()
             connection.close()
             print("Connection to AWS RDS closed")
-        return start_times, end_times, start_time, end_time
+        return start_times, end_times, new_start_times, new_end_times
+
+# run()
