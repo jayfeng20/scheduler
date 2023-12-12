@@ -3,17 +3,15 @@ import os
 import calendar
 
 key = os.environ.get("OPENAI_API_KEY")
-os.environ.get("OPENAI_API_KEY")
 client = OpenAI(
   api_key=key,
 )
 
-
 system_message = """
 You are a concise and precise assistant. You find the most reasonable time slot(s) to assign this task, 
 taking timezone and work-life balance into consideration. Feel free to break it into chunks.
-Your output is in the form of a json object with only 1 field that's named 'slot' with its content in the form of 
-'00(Hour from 0 to 24) XX(Month)/XX(day)/XXXX(Year) - 00(Hour):00(Minute) XX(Month)/XX(day)/XXXX(Year)'
+Your output is in the form of a json object with 2 fields named "start_time" and "end_time" whose contents are 
+arrays of equal lengths of python datetime objects. They represent the time slot(s) you chose to schedule the task.
 """
 
 user_message = "Can you please find the best time slot(s) for me to do the following task?" + \
