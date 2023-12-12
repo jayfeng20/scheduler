@@ -36,16 +36,16 @@
         <label for="task-time">Expected Time (in hours):</label>
         <input type="number" id="task-time" name="task-time" required>
 
-        <label for="task-due">Due Date:</label>
+        <label for="task-due">Days until Deadline:</label>
         <select id="task-due" name="task-due" required>
           <option value="" selected></option>
-          <option value="sunday">Sunday</option>
-          <option value="monday">Monday</option>
-          <option value="tuesday">Tuesday</option>
-          <option value="wednesday">Wednesday</option>
-          <option value="thursday">Thursday</option>
-          <option value="friday">Friday</option>
-          <option value="saturday">Saturday</option>
+          <option value="one">1</option>
+          <option value="two">2</option>
+          <option value="three">3</option>
+          <option value="four">4</option>
+          <option value="five">5</option>
+          <option value="six">6</option>
+          <option value="friday">7</option>
         </select>
 
         <button id="submit-button">Submit</button>
@@ -198,6 +198,8 @@
           </tr>
         </tbody>
       </table>
+
+      <button class="week-page">Next Week</button>
     </div>
   </div>
 </body>

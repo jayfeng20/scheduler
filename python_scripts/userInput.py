@@ -1,7 +1,5 @@
 import sys
 
-print("fuck this shit")
-
 def printInput(taskName, taskType, taskTime, taskDue):
     print(f'Task Name: {taskName}, Task Type: {taskType}, Task Time: {taskTime}, Task Due: {taskDue}')
 
