@@ -5,11 +5,12 @@ import datetime
 def start_of_week():
     #datetime format: YYYY-MM-DD HH:MM:SS.ssssss
     current_datetime = datetime.datetime.now()
-    # .weekday() gets day of the week as int; Mon = 0 Sun = 6
     start = current_datetime - datetime.timedelta(days=current_datetime.weekday())
+    next_week_start = start + datetime.timedelta(days=7)
     date = start.date() #date format: YYYY-MM-DD
+    next_week_date = next_week_start.date()
 
-    return {'day': date.day, 'month': date.month, 'year': date.year}
+    return {'day0': date.day, 'month0': date.month, 'year0': date.year, 'day1': next_week_date.day, 'month1': next_week_date.month, 'year1': next_week_date.year}
 
 
 #test
