@@ -2,13 +2,16 @@ from openai import OpenAI
 import os  
 import calendar
 import datetime
+import json 
+from dotenv import load_dotenv
+load_dotenv()
 
 import lib.funcs as f
 import mysql.connector
 
 # variables
 current_datetime = datetime.datetime.now()
-task_name = ''
+task_name = 'task1'
 task_type = ''
 expected_time = 2
 assert expected_time <= 24 and 1 <= expected_time
@@ -21,11 +24,13 @@ user = os.environ.get("DB_USERNAME")
 pwd = os.environ.get("DB_PASSWORD")
 db = os.environ.get("DB_NAME")
 
+
 db_config = {
     "host": host,
     "user": user,
     "password": pwd,
-    "database": db
+    "database": db,
+    # 'ssl_ca': 'python_scripts/global-bundle.pem'
 }
 
 # openai config
@@ -33,6 +38,8 @@ key = os.environ.get("OPENAI_API_KEY")
 client = OpenAI(
   api_key=key,
 )
+
+connection = mysql.connector.connect(**db_config)
 
 # start the connectionn
 try:
@@ -52,8 +59,10 @@ try:
 
     alr_booked = []
     rows1, rows2 = f.retrieve(current=current_datetime, cursor=cursor)
-    start_times = [rows1[0] for row in rows1].extend([rows2[0] for row in rows2])
-    end_times = [rows1[1] for row in rows1].extend([rows2[1] for row in rows2])
+    start_times = [rows1[0] for row in rows1]
+    start_times.extend([rows2[0] for row in rows2])
+    end_times = [rows1[1] for row in rows1]
+    end_times.extend([rows2[1] for row in rows2])
     for i in range(len(start_times)):
         alr_booked.append(f"{start_times[i]} to {end_times[i]}")
 
@@ -88,11 +97,14 @@ try:
     # ai's response
     response = completion.choices[0].message.content
     print(response)
+    response = json.loads(response)
 
     # the new time slots to be added
     start_time, end_time = response['start_time'], response['end_time']
-
-    f.insert(start_time=start_time, end_time=end_time, cursor=cursor)
+    date_time_format = "%Y-%m-%dT%H:%M:%S"
+    start_time, end_time = datetime.datetime.strptime(start_time, date_time_format), datetime.datetime.strptime(end_time, date_time_format)
+    print(start_time, end_time)
+    f.insert(task_name=task_name, start_time=start_time, end_time=end_time, cursor=cursor)
     print('new time slot created and added')
 
 except mysql.connector.Error as e:
