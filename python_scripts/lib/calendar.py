@@ -4,13 +4,6 @@ import funcs as f
 import mysql.connector
 
 
-# user input
-task_name = ''
-task_type = ''
-expected_time = 1
-assert expected_time <= 24 and 1 <= expected_time
-due_in = 1
-assert due_in >= 1 and due_in <= 7 # due in at least 1 day and at most 1 week
 
 # sql config
 host = os.environ.get("DB_ENDPOINT")
@@ -49,7 +42,7 @@ def create(week):
     cursor.execute(create_table_query2)
 
 def insert(slots):
-    
+
 
 try:
     connection = mysql.connector.connect(**db_config)
