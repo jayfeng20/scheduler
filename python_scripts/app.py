@@ -32,8 +32,8 @@ def process():
 
     # alr_booked_start, alr_booked_end, new_start, new_end = test.run()
     # print(alr_booked_start, alr_booked_end, new_start, new_end)
-    dt1 = datetime.datetime(2023, 12, 12, 3, 0, 0)
-    dt2 = datetime.datetime(2023, 12, 12, 5, 0, 0) 
+    dt1 = datetime.datetime(2023, 12, 21, 9)
+    dt2 = datetime.datetime(2023, 12, 21, 17)
     return f.create_calendar(dt1, dt2)
 
 if __name__ == '__main__':
