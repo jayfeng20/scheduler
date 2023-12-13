@@ -69,7 +69,7 @@ button.onclick = (event) => {
 function updateCalendar(data) {
   for (let time = 0; time < 8; time++) {
     for (let day = 0; day < 7; day++) {
-      if (data[time][day] <= 1) {
+      if (data[time][day] >= 1) {
         updateCell(time, day);
       } else {
         resetCell(time, day);
