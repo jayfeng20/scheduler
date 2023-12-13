@@ -8,7 +8,6 @@ from lib import funcs as f
 
 import userInput
 
-import test
 import test2
 # os.environ['ROOT_PATH'] = os.path.abspath(os.path.join("..",os.curdir))
 
