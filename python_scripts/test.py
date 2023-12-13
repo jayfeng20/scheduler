@@ -5,6 +5,7 @@ import datetime
 import json 
 from dotenv import load_dotenv
 load_dotenv()
+import numpy
 
 import lib.funcs as f
 import mysql.connector
@@ -12,7 +13,7 @@ import mysql.connector
 
 
 
-def run(task_name='t3', task_type='project', task_time=1, task_due=7):
+def run(task_name='t3', task_type='project', task_time=2, task_due=7):
     task_name = task_name
     task_type = task_type
     expected_time = int(task_time)
@@ -85,7 +86,7 @@ def run(task_name='t3', task_type='project', task_time=1, task_due=7):
         """
 
         user_message = f"""
-        Can you please find timeslots that's just enough for me to complete the following task once?
+        Can you please find a reasonable set of timeslot during which I can do my task?
         [time right now]: {current_datetime}
         [total time required]: {expected_time} hours,
         [due in]: {due_in} days.
@@ -97,13 +98,14 @@ def run(task_name='t3', task_type='project', task_time=1, task_due=7):
 
 
         Requirements:
-        1. If you generate more than 1 timeslots, the sum of their lengths have to be equal to [total time required]
+        1. The total length of the set of timeslots you found has to equal to {expected_time} hours.
         2. Don't do what humans don't like
         3. You have to schedule timeslots that do not overlap with already booked timeslots.
         4. You can only schedule between 9am and 5pm.
         5. You are allowed to distribute the workload into smaller slots as long as the 
-        sum of the lengths of the slots equals the expected duration of the task. 
+        sum of the lengths of the slots equals the expected duration of the task, but you don't have to.
         6. you ALWAYS generate a set of timeslots.
+        7. You have to generate timeslots that have whole hours.
         """
 
 
