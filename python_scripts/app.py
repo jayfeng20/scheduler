@@ -32,13 +32,13 @@ def process():
     # same thing for new_start_times, new_end_times but they represent the newly generated timeslots.
     start_times, end_times, new_start_times, new_end_times = test.run()
 
-
-    # alr_booked_start, alr_booked_end, new_start, new_end = test.run()
-    # print(alr_booked_start, alr_booked_end, new_start, new_end)
-    # dt1 = datetime.datetime(2023, 12, 21, 9)
-    # dt2 = datetime.datetime(2023, 12, 21, 17)
-
-    return f.create_calendar(dt1, dt2)
+    calendar = []
+    for i in range(len(new_end_times)):
+        t1 = new_start_times[i]
+        t2 = new_end_times[i]
+        calendar.append(f.create_calendar(t1, t2))
+        
+    return f.add_calendars(calendar)
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)

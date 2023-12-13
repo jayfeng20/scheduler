@@ -71,7 +71,7 @@ def run(task_name='t3', task_type='project', task_time=2, task_due=7):
         end_times.extend([row[3] for row in rows2])
         for i in range(len(start_times)):
             alr_booked.append(f"{start_times[i]} to {end_times[i]}")
-        print(f'alr_booked: {alr_booked}')
+        # print(f'alr_booked: {alr_booked}')
 
       # TODO: Use alr_booked to display initialize the calendar
 
@@ -141,7 +141,5 @@ def run(task_name='t3', task_type='project', task_time=2, task_due=7):
             cursor.close()
             connection.close()
             print("Connection to AWS RDS closed")
-        print(start_times, end_times, new_start_times, new_end_times)
+        # print(start_times, end_times, new_start_times, new_end_times)
         return start_times, end_times, new_start_times, new_end_times
-
-run()

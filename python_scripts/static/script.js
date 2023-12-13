@@ -51,8 +51,12 @@ button.onclick = (event) => {
       console.log(response);
 
       // Update calendar with data
-      week1 = response[0];
-      week2 = response[1];
+      for (let i = 0; i < 8; i++) {
+        for (let j = 0; j < 7; j++) {
+          week1[i][j] += response[0][i][j];
+          week2[i][j] += response[1][i][j];
+        }
+      }
 
       updateCalendar(state === 0 ? week1 : week2);
     },
