@@ -12,11 +12,11 @@ import mysql.connector
 
 
 
-def run(task_name='t3', task_type='project', task_time=4, task_due=7):
+def run(task_name='t3', task_type='project', task_time=1, task_due=7):
     task_name = task_name
     task_type = task_type
     expected_time = int(task_time)
-    due_in = 2
+    due_in = task_due
     # due_in = task_due
     
     assert expected_time <= 24 and 1 <= expected_time
@@ -75,26 +75,35 @@ def run(task_name='t3', task_type='project', task_time=4, task_due=7):
       # TODO: Use alr_booked to display initialize the calendar
 
         system_message = """
+        Forget erveything I said.
         You are a smart assistant who is good at time management. 
-        You will be given current time, a task, the expected hours to finish the task, how many days until the task is due and time slots that are already booked.
-        You have to schedule timeslots that do not overlap with already booked timeslots.
-        You are allowed to assign the tasks to up to 2 timeslots as long as the timeslots add up to the expected hours.
-        You will find time slot(s) within the next 7 days, between 9am and 5pm and can be across different days to schedule this task.
-        Your output is in the form of a json object with 2 fields. The first field is named "new_start_times" and 
+        Your output is always in the form of a json object with 2 fields. The first field is named "new_start_times" and 
         it contains a list of python datetime objects that represent the starting times of the time slots you scheduled.
-        The second field is named "new_end_times" and 
-        it contains a list of python datetime objects that represent the ending times of the time slots you scheduled.
+        The second field is named "new_end_times" and it contains a list of python datetime objects that represent the ending times of the time slots you scheduled.
         So the first element of the new_start_times list and the first element of the new_end_times list would form the first 
         time slot you scheduled.
         """
 
-        user_message = "Can you please find the best time slot(s) for me to do the following task?" + \
-        "I don't want to work for too long in one seating. So please break long tasks down if possible." + \
-        f"""
-        time right now: {current_datetime}
-        expected duration: {expected_time} hours to finish, 
-        due in: {due_in} days.
+        user_message = f"""
+        Can you please find timeslots that's just enough for me to complete the following task once?
+        [time right now]: {current_datetime}
+        [total time required]: {expected_time} hours,
+        [due in]: {due_in} days.
         Already booked slots are: {', '.join(alr_booked)}.
+
+        What humans do not like: 
+        1. Working more than 3 hours in a row
+        2. not being able to eat lunch
+
+
+        Requirements:
+        1. If you generate more than 1 timeslots, the sum of their lengths have to be equal to [total time required]
+        2. Don't do what humans don't like
+        3. You have to schedule timeslots that do not overlap with already booked timeslots.
+        4. You can only schedule between 9am and 5pm.
+        5. You are allowed to distribute the workload into smaller slots as long as the 
+        sum of the lengths of the slots equals the expected duration of the task. 
+        6. you ALWAYS generate a set of timeslots.
         """
 
 
@@ -130,6 +139,7 @@ def run(task_name='t3', task_type='project', task_time=4, task_due=7):
             cursor.close()
             connection.close()
             print("Connection to AWS RDS closed")
+        print(start_times, end_times, new_start_times, new_end_times)
         return start_times, end_times, new_start_times, new_end_times
 
-# run()
+run()

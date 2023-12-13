@@ -25,15 +25,19 @@ def process():
     taskDue = request.form.get('task-due') 
     userInput.printInput(taskName, taskType, taskTime, taskDue)
 
-    # alr_booked_start: a list of python Datetime objects that represent the start times of already occupied timeslots on the calendar
-    # alr_booked_end: a list of python Datetime objects that represent the end times of already occupied timeslots on the calendar
-    # new_start: a python Datetime objects that represent the start time of the newly scheduled task
-    # new_end: a list of python Datetime objects that represent the end time of the newly scheduled task
+
+    # start_times is a list of python datetime objects that represent the start times of the already exisiting timeslots
+    # end_times is a list of python datetime objects that represent the end times of the already exisiting timeslots
+    # so start_times[0] and end_times[0] forms 1 already existing timeslot
+    # same thing for new_start_times, new_end_times but they represent the newly generated timeslots.
+    start_times, end_times, new_start_times, new_end_times = test.run()
+
 
     # alr_booked_start, alr_booked_end, new_start, new_end = test.run()
     # print(alr_booked_start, alr_booked_end, new_start, new_end)
-    dt1 = datetime.datetime(2023, 12, 21, 9)
-    dt2 = datetime.datetime(2023, 12, 21, 17)
+    # dt1 = datetime.datetime(2023, 12, 21, 9)
+    # dt2 = datetime.datetime(2023, 12, 21, 17)
+
     return f.create_calendar(dt1, dt2)
 
 if __name__ == '__main__':
