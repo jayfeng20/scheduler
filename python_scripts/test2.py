@@ -113,18 +113,18 @@ def run(task_name='t3', task_type='project', task_time=2, task_due='seven'):
 
         Requirements:
         1. The total length of the set of timeslots you found has to equal to {expected_time} hours.
-        7. Summarize your conclusion and only show me the timeslots represented 
+        2. Summarize your conclusion and only show me the timeslots represented 
         as 2 things, first marks the start of the timeslot, second marks the end of the timeslot,
         different timeslots are separated by a newline character.
-        2. Don't do what humans don't like
-        3. You have to STRICTLY schedule timeslots that do not overlap with already booked timeslots.
+        3. Don't do what humans don't like
+        4. You have to STRICTLY schedule timeslots that do not overlap with already booked timeslots.
         5. Ideally, there are breaks in between timeslots for me to rest.
-        4. You can only, STRICTLY schedule between 9am and 5pm.
-        5. You are allowed to distribute the workload into smaller slots as long as the 
+        6. You can only, STRICTLY schedule between 9am and 5pm.
+        7. You are allowed to distribute the workload into smaller slots as long as the 
         sum of the lengths of the slots equals the expected duration of the task, but you don't have to.
-        6. you ALWAYS generate a set of timeslots.
-        7. Double check your output is lists of python datetime objects
-        8. Double check your schedules are 9am and 5pm.
+        8. you ALWAYS generate a set of timeslots.
+        9. Double check your output is lists of python datetime objects
+        10. Double check your schedules are 9am and 5pm.
 
         """
     #    7. Summarize your conclusion and only show me the timeslots represent as a python list yourOutput, yourOutput[0] is a python datetime that marks where the timeslot starts. yourOutput[1] is a python datetime that marks where the timeslot ends.
@@ -136,7 +136,8 @@ def run(task_name='t3', task_type='project', task_time=2, task_due='seven'):
             {"role": "system", "content": system_message},
             {"role": "user", "content": user_message}
             ],
-            top_p=0.1
+            top_p=0.1,
+            # response_format={ "type": "json_object" }
         )
 
         # ai's response
