@@ -1,6 +1,7 @@
 import datetime
 from datetime import timedelta
 import mysql.connector
+import numpy as np
 
 # returns 2 datetime objects
 def start_of_week(current_datetime=datetime.datetime.now()):
@@ -92,7 +93,15 @@ def create_calendar(dt1, dt2):
     for i in range(startIndex, endIndex):
         cal[weekIndex][i][dayIndex] = 1
 
-    return cal 
+    return cal
+
+#adding together calendars
+def add_calendars(calendars):
+    calendar = np.zeros((2, 8, 7))
+    for cal in calendars:
+        calendar += np.array(cal)
+    
+    return calendar.tolist()
 
 if __name__ == "__main__":
     #testing create_cal 
