@@ -10,43 +10,61 @@ import numpy
 import lib.funcs as f
 import mysql.connector
 
+# mysql config
+host = os.environ.get("DB_ENDPOINT")
+user = os.environ.get("DB_USERNAME")
+pwd = os.environ.get("DB_PASSWORD")
+db = os.environ.get("DB_NAME")
 
 
+db_config = {
+    "host": host,
+    "user": user,
+    "password": pwd,
+    "database": db,
+    # 'ssl_ca': 'python_scripts/global-bundle.pem'
+}
 
-def run(task_name='t3', task_type='project', task_time=2, task_due=7):
+# openai config
+key = os.environ.get("OPENAI_API_KEY")
+client = OpenAI(
+  api_key=key,
+)
+
+int_convert = {}
+for i in range(1, 8):
+    int_convert['one'] = 1
+    int_convert['two'] = 2
+    int_convert['three'] = 3
+    int_convert['four'] = 4
+    int_convert['five'] = 5
+    int_convert['six'] = 6
+    int_convert['seven'] = 7
+
+
+def drop_table():
+    connection = mysql.connector.connect(**db_config)
+    cursor = connection.cursor()
+    use_db_query = f"USE {db}"
+    cursor.execute(use_db_query)
+    print(f"Using database {db}")
+    f.drop_table(cursor)
+    print(f"Dropped table")
+    cursor.close()
+    connection.close()
+    print("Connection to AWS RDS closed")
+
+
+def run(task_name='t3', task_type='project', task_time=2, task_due='seven'):
     task_name = task_name
     task_type = task_type
     expected_time = int(task_time)
-    due_in = task_due
+    due_in = int_convert[f'{task_due}']
     # due_in = task_due
     
     assert expected_time <= 24 and 1 <= expected_time
     assert due_in >= 1 and due_in <= 7 # due in at least 1 day and at most 1 week
     current_datetime = datetime.datetime.now()
-
-
-    # mysql config
-    host = os.environ.get("DB_ENDPOINT")
-    user = os.environ.get("DB_USERNAME")
-    pwd = os.environ.get("DB_PASSWORD")
-    db = os.environ.get("DB_NAME")
-
-
-    db_config = {
-        "host": host,
-        "user": user,
-        "password": pwd,
-        "database": db,
-        # 'ssl_ca': 'python_scripts/global-bundle.pem'
-    }
-
-    # openai config
-    key = os.environ.get("OPENAI_API_KEY")
-    client = OpenAI(
-      api_key=key,
-    )
-
-    connection = mysql.connector.connect(**db_config)
 
     # start the connectionn
     try:
@@ -79,14 +97,15 @@ def run(task_name='t3', task_type='project', task_time=2, task_due=7):
         Forget erveything I said.
         You are a smart assistant who is good at time management. 
         Your output is always in the form of a json object with 2 fields. The first field is named "new_start_times" and 
-        it contains a list of python datetime objects that represent the starting times of the time slots you scheduled.
-        The second field is named "new_end_times" and it contains a list of python datetime objects that represent the ending times of the time slots you scheduled.
+        it contains a list of 1 python datetime object that represent the starting time of the timeslot you scheduled.
+        The second field is named "new_end_times" and it contains a list of 1 python datetime object that represents the ending time of the timeslot you scheduled.
         So the first element of the new_start_times list and the first element of the new_end_times list would form the first 
-        time slot you scheduled.
+        timeslot you scheduled.
         """
 
         user_message = f"""
-        Can you please find a reasonable set of timeslot during which I can do my task?
+        Forget what I said before.
+        Can you please find 1 timeslot during which I can do my task?
         [time right now]: {current_datetime}
         [total time required]: {expected_time} hours,
         [due in]: {due_in} days.
@@ -99,13 +118,16 @@ def run(task_name='t3', task_type='project', task_time=2, task_due=7):
 
         Requirements:
         1. The total length of the set of timeslots you found has to equal to {expected_time} hours.
+        7. Generated timeslots cannot have non-zero minute or second value
         2. Don't do what humans don't like
         3. You have to schedule timeslots that do not overlap with already booked timeslots.
         4. You can only schedule between 9am and 5pm.
         5. You are allowed to distribute the workload into smaller slots as long as the 
         sum of the lengths of the slots equals the expected duration of the task, but you don't have to.
         6. you ALWAYS generate a set of timeslots.
-        7. You have to generate timeslots that have whole hours.
+        7. Double check your output is lists of python datetime objects in json
+        8. Double check your schedules are 9am and 5pm.
+        9. Double check your output is lists of python datetime objects in json
         """
 
 
@@ -122,6 +144,7 @@ def run(task_name='t3', task_type='project', task_time=2, task_due=7):
         # ai's response
         response = completion.choices[0].message.content
         response = json.loads(response)
+        print("ai's response is" + str(response))
 
         # the new time slots to be added
         new_start_times, new_end_times = response['new_start_times'], response['new_end_times']
@@ -141,5 +164,8 @@ def run(task_name='t3', task_type='project', task_time=2, task_due=7):
             cursor.close()
             connection.close()
             print("Connection to AWS RDS closed")
-        # print(start_times, end_times, new_start_times, new_end_times)
+        print(start_times, end_times, new_start_times, new_end_times)
         return start_times, end_times, new_start_times, new_end_times
+
+# run()
+# drop_table()

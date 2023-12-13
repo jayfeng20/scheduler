@@ -78,6 +78,21 @@ def retrieve(current, cursor):
     rows2 = cursor.fetchall()
     return rows1, rows2
 
+# drop tables
+def drop_table(cursor):
+    week1, week2 = start_of_week(current_datetime=datetime.datetime.now())
+    table1 = f'{str(week1.month)+str(week1.day)+str(week1.year)}'
+    drop_query1 = f"""
+    DROP TABLE t{table1};
+"""
+    cursor.execute(drop_query1)
+
+    table2 = f'{str(week2.month)+str(week2.day)+str(week2.year)}'
+    drop_query2 = f"""
+    DROP TABLE t{table2};
+"""
+    cursor.execute(drop_query2)
+
 #converting chatgpt data into week
 def create_calendar(dt1, dt2):
     #initialize 3d matrix 7 days per week, 8 hrs/day

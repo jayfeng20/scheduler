@@ -30,7 +30,9 @@ def process():
     # end_times is a list of python datetime objects that represent the end times of the already exisiting timeslots
     # so start_times[0] and end_times[0] forms 1 already existing timeslot
     # same thing for new_start_times, new_end_times but they represent the newly generated timeslots.
-    start_times, end_times, new_start_times, new_end_times = test.run()
+    start_times, end_times, new_start_times, new_end_times = test.run(task_name=taskName, task_type=taskType, task_time=taskTime, task_due=taskDue)
+    print(f"task time is {taskTime}")
+    print(f"taks due is {taskDue}")
 
     calendar = []
     for i in range(len(new_end_times)):
@@ -41,4 +43,8 @@ def process():
     return f.add_calendars(calendar)
 
 if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+    try:
+        test.drop_table()
+    except:
+        pass
+    app.run(port=3307, debug=True)
