@@ -6,6 +6,29 @@ let cellNames = document.querySelectorAll('p');
 
 let state = 0;
 let taskName;
+
+let week1Names = [
+  ['', '', '', '', '', '', ''],
+  ['', '', '', '', '', '', ''],
+  ['', '', '', '', '', '', ''],
+  ['', '', '', '', '', '', ''],
+  ['', '', '', '', '', '', ''],
+  ['', '', '', '', '', '', ''],
+  ['', '', '', '', '', '', ''],
+  ['', '', '', '', '', '', ''],
+];
+
+let week2Names = [
+  ['', '', '', '', '', '', ''],
+  ['', '', '', '', '', '', ''],
+  ['', '', '', '', '', '', ''],
+  ['', '', '', '', '', '', ''],
+  ['', '', '', '', '', '', ''],
+  ['', '', '', '', '', '', ''],
+  ['', '', '', '', '', '', ''],
+  ['', '', '', '', '', '', ''],
+];
+
 let week1 = [
   [0, 0, 0, 0, 0, 0, 0],
   [0, 0, 0, 0, 0, 0, 0],
@@ -58,7 +81,7 @@ button.onclick = (event) => {
         }
       }
 
-      updateCalendar(state === 0 ? week1 : week2);
+      updateCalendar(state === 0 ? week1 : week2, state);
     },
     error: function (error) {
       console.log(error);
@@ -70,7 +93,7 @@ function updateCalendar(data) {
   for (let time = 0; time < 8; time++) {
     for (let day = 0; day < 7; day++) {
       if (data[time][day] >= 1) {
-        updateCell(time, day);
+        updateCell(time, day, state);
       } else {
         resetCell(time, day);
       }
@@ -78,9 +101,25 @@ function updateCalendar(data) {
   }
 }
 
-function updateCell(time, day) {
+function updateCell(time, day, state) {
   cells[time * 7 + day].style.backgroundColor = '#90EE907F';
-  cellNames[time * 7 + day].innerText = taskName;
+  let currWeek = state === 0 ? week1Names : week2Names;
+
+  if (currWeek[time][day] === '') {
+    cellNames[time * 7 + day].innerText = taskName;
+    
+    if (state == 0) {
+      week1Names[time][day] = taskName;
+    } else {
+      week2Names[time][day] = taskName;
+    }
+  } else {
+    if (state == 0) {
+      cellNames[time * 7 + day].innerText = week1Names[time][day];
+    } else {
+      cellNames[time * 7 + day].innerText = week2Names[time][day];
+    }
+  }
 }
 
 function resetCell(time, day) {
