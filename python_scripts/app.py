@@ -9,6 +9,7 @@ from lib import funcs as f
 import userInput
 
 import test
+import test2
 # os.environ['ROOT_PATH'] = os.path.abspath(os.path.join("..",os.curdir))
 
 app = Flask(__name__)
@@ -30,7 +31,7 @@ def process():
     # end_times is a list of python datetime objects that represent the end times of the already exisiting timeslots
     # so start_times[0] and end_times[0] forms 1 already existing timeslot
     # same thing for new_start_times, new_end_times but they represent the newly generated timeslots.
-    start_times, end_times, new_start_times, new_end_times = test.run(task_name=taskName, task_type=taskType, task_time=taskTime, task_due=taskDue)
+    start_times, end_times, new_start_times, new_end_times = test2.run(task_name=taskName, task_type=taskType, task_time=taskTime, task_due=taskDue)
     print(f"task time is {taskTime}")
     print(f"taks due is {taskDue}")
 

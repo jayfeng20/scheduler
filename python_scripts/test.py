@@ -120,8 +120,8 @@ def run(task_name='t3', task_type='project', task_time=2, task_due='seven'):
         1. The total length of the set of timeslots you found has to equal to {expected_time} hours.
         7. Generated timeslots cannot have non-zero minute or second value
         2. Don't do what humans don't like
-        3. You have to schedule timeslots that do not overlap with already booked timeslots.
-        4. You can only schedule between 9am and 5pm.
+        3. You have to strictly schedule timeslots that do not overlap with already booked timeslots.
+        4. You can only, strictly schedule between 9am and 5pm.
         5. You are allowed to distribute the workload into smaller slots as long as the 
         sum of the lengths of the slots equals the expected duration of the task, but you don't have to.
         6. you ALWAYS generate a set of timeslots.
